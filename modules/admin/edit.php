@@ -7,6 +7,7 @@ $post_id = $_GET['post_id'];
 $separate_post = get_post_by_id($post_id);
 edit_post($connect, $post_id);
 $categories = get_category($connect);
+add_image($connect);
 
 ?>
 
@@ -56,12 +57,12 @@ $categories = get_category($connect);
 				<div class="card my-4">
 					<h5 class="card-header">Редактирование записи</h5>
 					<div class="card-body">
-						<form method="post">
+						<form method="post" enctype="multipart/form-data">
 							<div class="form-group">
 								<label for="formGroupExampleInput">Заголовок записи:</label>
 								<input type="text" class="form-control" value="<?php echo $separate_post['title']; ?>" name="title"><br>
-								<label for="formGroupExampleInput">Ссылка на изображение:</label>
-								<input type="text" class="form-control" value="<?php echo $separate_post['image']; ?>" name="image"><br>
+								<label for="formGroupExampleInput">Изображение:</label>
+								<input type="file" class="form-control-file" value="<?php echo $separate_post['image']; ?>" name="image"><br>
 								<label for="formGroupExampleInput">Категория:</label>
 								<select class="form-control" name="category">
 									<?php foreach($categories as $category) { ?>

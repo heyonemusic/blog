@@ -11,7 +11,7 @@ if(isset($_GET['delete'])){
 $posts = get_posts($connect);
 $categories = get_category($connect);
 add_post($connect);
-
+add_image($connect);
 
 ?>
 
@@ -127,10 +127,10 @@ add_post($connect);
 				<div class="card my-4">
 					<h5 class="card-header">Добавить новую запись:</h5>
 					<div class="card-body">
-						<form method="post">
+						<form method="post" enctype="multipart/form-data">
 							<div class="form-group">
 								<input type="text" class="form-control" placeholder="Заголовок статьи:" name="title" required><br>
-								<input type="text" class="form-control" placeholder="Ссылка на изображение:" name="image" required><br>
+								<input type="file" class="form-control-file" placeholder="Изображение:" name="image" required><br>
 								<select class="form-control" name="categories">
 									<?php foreach($categories as $category) { ?>
 										<option><?=$category["id"]?></option>

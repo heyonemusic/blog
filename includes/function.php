@@ -123,6 +123,25 @@ function admin($connect){
 	}
 }
 
+function add_image($connect) {
+	$path = '../../images/post/';
+	$types = array('image/gif', 'image/png', 'image/jpeg');
+	$size = 1024000;
+	if($_SERVER['REQUEST_METHOD'] == 'POST'){
+//Перемещение файла в специальную директорию
+		if(move_uploaded_file($_FILES['image']['tmp_name'], $path . $_FILES['image']['name'])){
+			$image = ($_FILES['image']['name']);
+			$sql = "INSERT INTO posts (`image`) VALUES ('$image')";
+			mysql_query($connect, $sql);
+		}
+//Проверка файла на его тип
+		if(!in_array($_FILES['image']['type'], $types))
+			die();
+//Проверка файла на его размер
+		if ($_FILES['image']['size'] > $size)
+			die('Слишком большой размер файла. <a href="?">Попробовать другой файл?</a>');
+	}
+}
 /*
 function registration_new_user($connect){
 	$email = trim($_POST['email']);
