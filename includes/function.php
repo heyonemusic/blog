@@ -49,9 +49,9 @@ function get_category_title($category_id){
 
 //Добавление комментария к статье
 function add_comment($connect, $post_id){
-	$name = trim(htmlspecialchars($_POST['name']));
-	$text = trim(htmlspecialchars($_POST['text']));
-	$post_id = $_GET['post_id'];
+	$name = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['name'])));
+	$text = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['text'])));
+	$post_id = (int)$_GET['post_id'];
 	if(!empty($_POST)){
 		$sql = "INSERT INTO comments (`name`, `text`, `post_id`) VALUES ('$name', '$text', '$post_id')";
 		$result = mysqli_query($connect, $sql);
@@ -63,7 +63,7 @@ function add_comment($connect, $post_id){
 
 //Вывод комментариев
 function pin_comment($connect, $post_id){
-	$post_id = $_GET['post_id'];
+	$post_id = (int)$_GET['post_id'];
 	$sql = "SELECT * FROM comments WHERE post_id =" .$post_id;
 	$query = mysqli_query($connect, $sql);
 	$result = mysqli_fetch_all($query, MYSQLI_ASSOC);
@@ -72,29 +72,54 @@ function pin_comment($connect, $post_id){
 
 // Добавление записи
 function add_post($connect){
-	$title = trim(htmlspecialchars($_POST['title']));
-	$image = trim(htmlspecialchars($_POST['image']));
-	$categories = ($_POST['categories']);
-	$text = ($_POST['text']);
-	if(!empty($_POST)){
-		$sql = "INSERT INTO posts (`title`, `image`, `category_id`, `text`) VALUES ('$title', '$image', '$categories', '$text')";
-		$result = mysqli_query($connect, $sql);
-		$url = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on")) ? "https" : "http";
-		$url .= "://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-		header("Location: $url");
+	$types = array('image/gif', 'image/png', 'image/jpeg');
+	if(isset($_POST['submit'])){
+		$title = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['title'])));
+		$text = mysqli_real_escape_string($connect, $_POST['text']);
+		$categories = mysqli_real_escape_string($connect, $_POST['categories']);
+		$path = '../../images/post/';
+		if(is_uploaded_file($_FILES["image"]["tmp_name"]))
+		{
+			//Проверка файла на его тип
+			if(!in_array($_FILES['image']['type'], $types))
+				die('Ошибка загрузки файла. Пожалуйста, загружайте изображения только в форматах JPG, PNG, GIF.');
+			move_uploaded_file($_FILES["image"]["tmp_name"], $path . $_FILES["image"]["name"]);
+			$image = $_FILES['image']['name'];
+			$sql = "INSERT INTO posts (`title`, `text`, `category_id`, `image`) VALUES ('$title', '$text', '$categories', 'images/post/$image')";
+			$result = mysqli_query($connect, $sql);
+			header("Location: ". $_SERVER["REQUEST_URI"]);
+		} else {
+			die("Ошибка загрузки изображения. Пожалуйста, вернитесь обратно и убедитесь в том, что Вы загрузили изображение.");
+		}
 	}
 }
 
 function edit_post($connect, $post_id){
-	$post_id = $_GET['post_id'];
+	$post_id = (int)$_GET['post_id'];
+	$types = array('image/gif', 'image/png', 'image/jpeg');
 	if(isset($_POST['submit'])){
-		$title = $_POST['title'];
-		$image = $_POST['image'];
-		$text = $_POST['text'];
-		$category = $_POST['category'];
-		$update = "UPDATE posts SET `title` = '$title', `image` = '$image', `text` = '$text', `category_id` = '$category' WHERE id = ".$post_id;
-		$result = mysqli_query($connect, $update);
-		header("Location: ". $_SERVER["REQUEST_URI"]);
+		$title = mysqli_real_escape_string($connect, $_POST['title']);
+		$text = mysqli_real_escape_string($connect, $_POST['text']);
+		$category = mysqli_real_escape_string($connect, $_POST['category']);
+		//Путь, куда должно сохраняться загруженное изображение
+		$path = '../../images/post/';
+		 // Если файл загружен успешно, перемещаем его 
+     // из временной директории в конечную, иначе прекращаем работу скрипта
+		if(is_uploaded_file($_FILES["image"]["tmp_name"])){
+			//Проверка файла на его тип, в противном случае прекращение работы скрипта
+			if(!in_array($_FILES['image']['type'], $types)){
+				die('Ошибка загрузки файла. Пожалуйста, загружайте изображения только в форматах JPG, PNG, GIF.');
+			}
+			//Перемещение файла в специальную директорию на сервере
+			move_uploaded_file($_FILES["image"]["tmp_name"], $path . $_FILES["image"]["name"]);		$image = $_FILES['image']['name'];
+			$update = "UPDATE posts SET `title` = '$title', `text` = '$text', `image` = 'images/post/$image', `category_id` = '$category' WHERE id = ".$post_id;
+			$result = mysqli_query($connect, $update);
+			header("Location: ". $_SERVER["REQUEST_URI"]);
+		} else {
+			$update = "UPDATE posts SET `title` = '$title', `text` = '$text', `category_id` = '$category' WHERE id = ".$post_id;
+			$result = mysqli_query($connect, $update);
+			header("Location: ". $_SERVER["REQUEST_URI"]);
+		}
 	}
 }
 
@@ -123,25 +148,6 @@ function admin($connect){
 	}
 }
 
-function add_image($connect) {
-	$path = '../../images/post/';
-	$types = array('image/gif', 'image/png', 'image/jpeg');
-	$size = 1024000;
-	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-//Перемещение файла в специальную директорию
-		if(move_uploaded_file($_FILES['image']['tmp_name'], $path . $_FILES['image']['name'])){
-			$image = ($_FILES['image']['name']);
-			$sql = "INSERT INTO posts (`image`) VALUES ('$image')";
-			mysql_query($connect, $sql);
-		}
-//Проверка файла на его тип
-		if(!in_array($_FILES['image']['type'], $types))
-			die();
-//Проверка файла на его размер
-		if ($_FILES['image']['size'] > $size)
-			die('Слишком большой размер файла. <a href="?">Попробовать другой файл?</a>');
-	}
-}
 /*
 function registration_new_user($connect){
 	$email = trim($_POST['email']);
