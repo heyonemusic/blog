@@ -1,7 +1,9 @@
 <?php
 
-require_once 'function.php';
-admin($connect);
+//Подключение функций
+require_once __DIR__ . '/../function/function.php';
+//Подключение сессии админа
+require_once __DIR__ . '/../ads/ads_session_admin.php';
 
 ?>
 
@@ -13,14 +15,11 @@ admin($connect);
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<title>Тестовый блог</title>
-	<!-- Bootstrap core CSS -->
-	<link href="css/animate.css" rel="stylesheet">
-	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<!-- Custom styles for this template -->
-	<link href="css/blog-home.css" rel="stylesheet">
+	<link href="../css/animate.css" rel="stylesheet">
+	<link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/blog-home.css" rel="stylesheet">
 </head>
 <body>
-
 	<!-- Форма авторизации на сайте -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -73,8 +72,7 @@ admin($connect);
 	</div>
 -->
 
-
-<!-- Navigation -->
+<!-- Навигация -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 	<div class="container">
 		<a class="navbar-brand" href="/">Тестовый блог</a>
@@ -83,17 +81,20 @@ admin($connect);
 		</button>
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="navbar-nav ml-auto">
-				<?php if(!$_SESSION['admin']){ ?>
-					<li class="nav-item">
-						<a class="nav-link" href="/" data-toggle="modal" data-target="#exampleModal">Вход</a>
-					</li>
-				<?php } 
-				else { ?>
-					<li class="nav-item">
-						<a class="nav-link" href="../modules/admin/admin.php">Административная панель</a>
-					</li>
-				<?php } ?>
-			</ul>
-		</div>
-	</div>
-</nav>
+				<!-- Если сессия не админ, то отображай ссылку
+					   на форму с авторизацией. Иначе, отображай ссылку 
+					   на административную панель сайта -->
+					   <?php if(!$_SESSION['admin']){ ?>
+					   	<li class="nav-item">
+					   		<a class="nav-link" href="/" data-toggle="modal" data-target="#exampleModal">Вход</a>
+					   	</li>
+					   <?php } 
+					   else { ?>
+					   	<li class="nav-item">
+					   		<a class="nav-link" href="../app/admin/admin.php">Административная панель</a>
+					   	</li>
+					   <?php } ?>
+					 </ul>
+					</div>
+				</div>
+			</nav>

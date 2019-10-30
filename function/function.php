@@ -1,7 +1,7 @@
 <?php
 
-//Файл с подключением к БД
-require_once 'connect.php';
+//Подключение к БД
+require_once __DIR__ . '/../database/connect.php';
 
 //Вывод данных из таблицы "Категории"
 function get_category($connect){
@@ -28,7 +28,7 @@ function get_post_by_id($post_id){
   return $separate_post; //Возвращение результата
 }
 
-//Вывод статьи по категориям
+//Вывод статей по категориям
 function get_posts_by_category($connect, $category_id){
 	$category_id = mysqli_real_escape_string($connect, $category_id);
 	$sql = "SELECT * FROM posts WHERE category_id = ".$category_id;
@@ -55,9 +55,7 @@ function add_comment($connect, $post_id){
 	if(!empty($_POST)){
 		$sql = "INSERT INTO comments (`name`, `text`, `post_id`) VALUES ('$name', '$text', '$post_id')";
 		$result = mysqli_query($connect, $sql);
-		$url = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on")) ? "https" : "http";
-		$url .= "://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-		header("Location: $url");
+		return $result;
 	}
 }
 
@@ -70,30 +68,37 @@ function pin_comment($connect, $post_id){
 	return $result;
 }
 
-// Добавление записи
+// Добавление записи на сайт
 function add_post($connect){
 	$types = array('image/gif', 'image/png', 'image/jpeg');
 	if(isset($_POST['submit'])){
 		$title = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['title'])));
 		$text = mysqli_real_escape_string($connect, $_POST['text']);
 		$categories = mysqli_real_escape_string($connect, $_POST['categories']);
+		//Путь, куда должно сохраняться загруженное изображение
 		$path = '../../images/post/';
+		//Если изображение загружено
 		if(is_uploaded_file($_FILES["image"]["tmp_name"]))
 		{
-			//Проверка файла на его тип
+			//Проверка изображения на его тип
 			if(!in_array($_FILES['image']['type'], $types))
 				die('Ошибка загрузки файла. Пожалуйста, загружайте изображения только в форматах JPG, PNG, GIF.');
+			//Перемещение изображения в специальную директорию на сервере
+			//Запись названия и формата изображения в БД
 			move_uploaded_file($_FILES["image"]["tmp_name"], $path . $_FILES["image"]["name"]);
 			$image = $_FILES['image']['name'];
 			$sql = "INSERT INTO posts (`title`, `text`, `category_id`, `image`) VALUES ('$title', '$text', '$categories', 'images/post/$image')";
 			$result = mysqli_query($connect, $sql);
 			header("Location: ". $_SERVER["REQUEST_URI"]);
 		} else {
-			die("Ошибка загрузки изображения. Пожалуйста, вернитесь обратно и убедитесь в том, что Вы загрузили изображение.");
+			$sql = "INSERT INTO posts (`title`, `text`, `category_id`) VALUES ('$title', '$text', '$categories')";
+			$result = mysqli_query($connect, $sql);
+			header("Location: ". $_SERVER["REQUEST_URI"]);
 		}
 	}
 }
 
+//Редактирование записи на сайте
 function edit_post($connect, $post_id){
 	$post_id = (int)$_GET['post_id'];
 	$types = array('image/gif', 'image/png', 'image/jpeg');
@@ -103,14 +108,14 @@ function edit_post($connect, $post_id){
 		$category = mysqli_real_escape_string($connect, $_POST['category']);
 		//Путь, куда должно сохраняться загруженное изображение
 		$path = '../../images/post/';
-		 // Если файл загружен успешно, перемещаем его 
-     // из временной директории в конечную, иначе прекращаем работу скрипта
+		 //Если изображение загружено
 		if(is_uploaded_file($_FILES["image"]["tmp_name"])){
-			//Проверка файла на его тип, в противном случае прекращение работы скрипта
+			//Проверка изображения на его тип
 			if(!in_array($_FILES['image']['type'], $types)){
 				die('Ошибка загрузки файла. Пожалуйста, загружайте изображения только в форматах JPG, PNG, GIF.');
 			}
-			//Перемещение файла в специальную директорию на сервере
+			//Перемещение изображения в специальную директорию на сервере
+			//Запись названия и формата изображения в БД
 			move_uploaded_file($_FILES["image"]["tmp_name"], $path . $_FILES["image"]["name"]);		$image = $_FILES['image']['name'];
 			$update = "UPDATE posts SET `title` = '$title', `text` = '$text', `image` = 'images/post/$image', `category_id` = '$category' WHERE id = ".$post_id;
 			$result = mysqli_query($connect, $update);
@@ -123,6 +128,7 @@ function edit_post($connect, $post_id){
 	}
 }
 
+//Сессия для работы в административной панели
 function admin($connect){
 	session_start();
 	//Получаем админа
@@ -139,7 +145,7 @@ function admin($connect){
 	if(isset($_POST['submit'])){
 		if($admin === $_POST['login'] && $password === $_POST['password']){
 			$_SESSION['admin'] = $admin;
-			header("Location: modules/admin/admin.php");
+			header("Location: app/admin/admin.php");
 			exit;
 		}
 		else {

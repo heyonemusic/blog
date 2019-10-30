@@ -1,42 +1,30 @@
 <?php
 
-require_once '../../includes/connect.php';
-require_once '../../includes/function.php';
-require_once '../../includes/auth.php';
-if(isset($_GET['delete'])){
-	$id = ($_GET['delete']);
-	$query = "DELETE FROM posts WHERE id = $id";
-	mysqli_query($connect, $query);
-}
-$posts = get_posts($connect);
-$categories = get_category($connect);
-add_post($connect);
-
+//Подключение к БД
+require_once __DIR__ . '/../../database/connect.php';
+//Файл авторизации админа
+require_once __DIR__ . '/../../database/authorization.php';
+//Функции
+require_once __DIR__ . '/../../function/function.php';
+//Объявленные переменные, функции
+require_once __DIR__ . '/../../ads/admin/ads_admin.php';
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
 	<meta name="author" content="">
-
 	<title>Административная панель</title>
-
-	<!-- Bootstrap core CSS -->
 	<link href="../../css/animate.css" rel="stylesheet">
 	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-	<!-- Custom styles for this template -->
 	<link href="../../css/blog-home.css" rel="stylesheet">
-
 </head>
-
 <body>
+	<!-- Меню -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="#">Административная панель</a>
@@ -52,8 +40,7 @@ add_post($connect);
 			</div>
 		</div>
 	</nav>
-
-	<!-- Modal -->
+	<!-- Всплывающее окно с потверждение удаления записи -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -73,10 +60,8 @@ add_post($connect);
 			</div>
 		</div>
 	</div>
-
 	<div class="container">
 		<div class="row">
-			<!-- Blog Entries Column -->
 			<div class="col-md-12 animated delay-1s fadeIn">
 				<h1 class="my-4">
 					<small>Все записи:</small>
@@ -87,6 +72,7 @@ add_post($connect);
 					</button>
 					<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 						<div class="navbar-nav">
+							<!-- Список категорий -->
 							<a class="nav-item nav-link" href="admin.php">Все категории</a>
 							<?php foreach($categories as $category){ ?>
 								<a class="nav-item nav-link" href="category.php?id=<?=$category["id"]?>"><?=$category["title"]?></a>
@@ -94,7 +80,7 @@ add_post($connect);
 						</div>
 					</div>
 				</nav>
-				<!-- Blog Post -->
+				<!-- Список постов -->
 				<table class="table">
 					<thead>
 						<tr>
@@ -107,7 +93,7 @@ add_post($connect);
 							<tr>
 								<th scope="row"><?php echo $post['id']; ?></th>
 								<td>
-									<a href="../../post.php?post_id=<?=$post['id']?>" target="_blank">
+									<a href="../../pages/post.php?post_id=<?=$post['id']?>" target="_blank">
 										<?php echo $post['title']; ?>
 									</a>
 									<a href="?delete=<?=$post['id']?>" style="float: right;margin-left: 20px;"><img src="../../images/delete.png" title="Удалить запись"></a>
@@ -122,7 +108,7 @@ add_post($connect);
 	</div>
 	<div class="container">
 		<div class="row">
-			<!-- Blog Entries Column -->
+			<!-- Форма с добавлением поста на сайт -->
 			<div class="col-md-12 animated delay-1s fadeIn">
 				<div class="card my-4">
 					<h5 class="card-header">Добавить новую запись:</h5>
@@ -145,17 +131,13 @@ add_post($connect);
 			</div>
 		</div>
 	</div>
-
+	<!-- Подвал сайта -->
 	<footer class="py-5 bg-dark">
 		<div class="container">
 			<p class="m-0 text-center text-white">Copyright &copy; Тестовый блог 2019</p>
 		</div>
-		<!-- /.container -->
 	</footer>
-
-	<!-- Bootstrap core JavaScript -->
 	<script src="../../vendor/jquery/jquery.min.js"></script>
 	<script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

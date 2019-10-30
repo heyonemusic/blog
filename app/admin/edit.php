@@ -1,38 +1,30 @@
 <?php
 
-require_once '../../includes/connect.php';
-require_once '../../includes/function.php';
-require_once '../../includes/auth.php';
-$post_id = $_GET['post_id'];
-$separate_post = get_post_by_id($post_id);
-edit_post($connect, $post_id);
-$categories = get_category($connect);
-
+//Подключение к БД
+require_once '../../database/connect.php';
+//Файл авторизации админа
+require_once '../../database/authorization.php';
+//Функции
+require_once '../../function/function.php';
+//Объявленные переменные, функции
+require_once '../../ads/admin/ads_edit.php';
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
 	<meta name="author" content="">
-
 	<title>Административная панель</title>
-
-	<!-- Bootstrap core CSS -->
 	<link href="../../css/animate.css" rel="stylesheet">
 	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-	<!-- Custom styles for this template -->
 	<link href="../../css/blog-home.css" rel="stylesheet">
-
 </head>
-
 <body>
+	<!-- Меню -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="#">Административная панель</a>
@@ -48,9 +40,7 @@ $categories = get_category($connect);
 			</div>
 		</div>
 	</nav>
-
-
-
+	<!-- Форма редактирования поста -->
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 animated delay-1s fadeIn">
@@ -79,20 +69,13 @@ $categories = get_category($connect);
 			</div>
 		</div>
 	</div>
-
-
-
-
+	<!-- Подвал сайта -->
 	<footer class="py-5 bg-dark">
 		<div class="container">
 			<p class="m-0 text-center text-white">Copyright &copy; Тестовый блог 2019</p>
 		</div>
-		<!-- /.container -->
 	</footer>
-
-	<!-- Bootstrap core JavaScript -->
 	<script src="../../vendor/jquery/jquery.min.js"></script>
 	<script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
