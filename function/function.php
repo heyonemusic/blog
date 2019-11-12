@@ -13,7 +13,7 @@ function get_category($connect){
 
 //Вывод данных из таблицы "Посты"
 function get_posts($connect){
-	$sql = "SELECT * FROM posts ORDER BY id";
+	$sql = "SELECT * FROM posts ORDER BY id DESC LIMIT 3";
 	$result = mysqli_query($connect, $sql);
 	$posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	return $posts;
