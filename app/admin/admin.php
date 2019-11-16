@@ -27,7 +27,7 @@ require_once __DIR__ . '/../../ads/admin/ads_admin.php';
 	<!-- Меню -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="#">Административная панель</a>
+			<a class="navbar-brand" href="/">Административная панель</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -103,6 +103,17 @@ require_once __DIR__ . '/../../ads/admin/ads_admin.php';
 						<?php } ?>
 					</tbody>
 				</table>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination pagination-sm justify-content-center mb-4">
+						<?php for ($i = 1;$i <= $pagesCount; $i++){ ?>
+							<?php if($page == $i) { ?>
+								<li class="page-item active"><a class="page-link" href="?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+							<?php } else { ?>
+								<li class="page-item"><a class="page-link" href="?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+							<?php } ?>
+						<?php } ?>
+					</ul>
+				</nav>
 			</div>
 		</div>
 	</div>

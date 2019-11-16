@@ -30,9 +30,13 @@ require_once 'ads/ads_index.php';
       <!-- Пагинация -->
       <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center mb-4">
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <?php for ($i = 1;$i <= $pagesCount; $i++){ ?>
+            <?php if($page == $i) { ?>
+              <li class="page-item active"><a class="page-link" href="?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+            <?php } else { ?>
+              <li class="page-item"><a class="page-link" href="?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+            <?php } ?>
+          <?php } ?>
         </ul>
       </nav>
     </div>

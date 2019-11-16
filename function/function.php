@@ -13,7 +13,7 @@ function get_category($connect){
 
 //Вывод данных из таблицы "Посты"
 function get_posts($connect){
-	$sql = "SELECT * FROM posts ORDER BY id DESC LIMIT 3";
+	$sql = "SELECT * FROM posts ORDER BY id DESC";
 	$result = mysqli_query($connect, $sql);
 	$posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	return $posts;
@@ -116,7 +116,8 @@ function edit_post($connect, $post_id){
 			}
 			//Перемещение изображения в специальную директорию на сервере
 			//Запись названия и формата изображения в БД
-			move_uploaded_file($_FILES["image"]["tmp_name"], $path . $_FILES["image"]["name"]);		$image = $_FILES['image']['name'];
+			move_uploaded_file($_FILES["image"]["tmp_name"], $path . $_FILES["image"]["name"]);		
+			$image = $_FILES['image']['name'];
 			$update = "UPDATE posts SET `title` = '$title', `text` = '$text', `image` = 'images/post/$image', `category_id` = '$category' WHERE id = ".$post_id;
 			$result = mysqli_query($connect, $update);
 			header("Location: ". $_SERVER["REQUEST_URI"]);

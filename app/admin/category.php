@@ -27,7 +27,7 @@ require_once '../../ads/admin/ads_category.php';
 	<!-- Меню -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="#">Административная панель</a>
+			<a class="navbar-brand" href="/">Административная панель</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -76,11 +76,23 @@ require_once '../../ads/admin/ads_category.php';
 										<?php echo $post['title']; ?>
 									</a>
 									<a href="?delete=<?=$post['id']?>" style="float: right;margin-left: 20px;"><img src="../../images/delete.png" title="Удалить запись"></a>
+									<a href="edit.php?post_id=<?=$post['id']?>" style="float: right;" target="_blank"><img src="../../images/edit.png" title="Редактировать запись"></a> 
 								</td>
 							</tr>
 						<?php } ?>
 					</tbody>
 				</table>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination pagination-sm justify-content-center mb-4">
+						<?php for ($i = 1;$i <= $pagesCount; $i++){ ?>
+							<?php if($page == $i) { ?>
+								<li class="page-item active"><a class="page-link" href="category.php?id=<?=$category_id?>&page=<?php echo $i ?>"><?php echo $i ?></a></li>
+							<?php } else { ?>
+								<li class="page-item"><a class="page-link" href="category.php?id=<?=$category_id?>&page=<?php echo $i ?>"><?php echo $i ?></a></li>
+							<?php } ?>
+						<?php } ?>
+					</ul>
+				</nav>
 			</div>
 		</div>
 	</div>

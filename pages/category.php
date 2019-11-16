@@ -29,7 +29,21 @@ require_once '../ads/ads_category.php';
           </div>
         </div>
       <?php } ?>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center mb-4">
+          <?php for ($i = 1;$i <= $pagesCount; $i++){ ?>
+            <?php if($page == $i) { ?>
+              <li class="page-item active"><a class="page-link" href="category.php?id=<?=$category_id?>&page=<?php echo $i ?>"><?php echo $i ?></a></li>
+            <?php } else { ?>
+              <li class="page-item"><a class="page-link" href="category.php?id=<?=$category_id?>&page=<?php echo $i ?>"><?php echo $i ?></a></li>
+            <?php } ?>
+          <?php } ?>
+        </ul>
+      </nav>
     </div>
+
+
+
     <!-- Сайдбар -->
     <div class="col-md-4">
       <!-- Вывод записей по категориям -->
