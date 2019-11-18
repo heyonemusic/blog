@@ -2,7 +2,7 @@
 
 //Удаление поста из БД
 if(isset($_GET['delete'])){
-	$id = ($_GET['delete']);
+	$id = (int)($_GET['delete']);
 	$query = "DELETE FROM posts WHERE id = $id";
 	mysqli_query($connect, $query);
 }

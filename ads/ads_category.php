@@ -3,7 +3,7 @@
 //Вывод категорий в сайдбаре
 $categories = get_category($connect);
 //Получение ID категории и присвоение в переменную
-$category_id = $_GET['id'];
+$category_id = (int)$_GET['id'];
 //Вывод постов по категории
 if(isset($_GET['page'])){
 	$page = (int)$_GET['page'];

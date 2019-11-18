@@ -54,7 +54,7 @@ require_once __DIR__ . '/../../ads/admin/ads_admin.php';
 					Вы точно хотите удалить запись?
 				</div>
 				<div class="modal-footer">
-					<a href="?delete=<?=$post['id']?>"><button type="button" class="btn btn-primary">Да</button></a>
+					<button type="button" class="btn btn-primary">Да</button>
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
 				</div>
 			</div>
