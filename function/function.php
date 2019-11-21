@@ -155,16 +155,54 @@ function admin($connect){
 	}
 }
 
-/*
+
 function registration_new_user($connect){
-	$email = trim($_POST['email']);
 	$name = trim($_POST['name']);
 	$login = trim($_POST['login']);
-	$password = trim(htmlspecialchars(md5($_POST['password'])))	;
+	$password = trim(htmlspecialchars($_POST['password']));
 	if(isset($_POST['registration'])){
-		$sql = "INSERT INTO users (`email`, `name`, `login`, `password`) VALUES ('$email', '$name', '$login', '$password')";
-		$result = mysqli_query($connect, $sql);
-		header("Location: ". $_SERVER["REQUEST_URI"]);
+		$query = mysqli_query($connect, "SELECT * FROM users WHERE login ='".mysqli_real_escape_string($connect, $login)."'");
+		if(mysqli_num_rows($query) > 0){
+		//Если пользователь с таким логином уже существует, то
+		//выводи следующее:
+			echo '<pre>';
+			echo 'К сожалению, логин ' . '<b>' . $login . '</b>' . ' уже занят другим пользователем.';
+			echo '<br>';
+			echo 'Пожалуйста, вернитесь обратно и попробуйте заново.';	
+			echo '<br>';
+			echo '<a href="/">Вернуться обратно</a>';
+			echo '</pre>';
+			exit();
+		} else {
+			$sql = "INSERT INTO users (`name`, `login`, `password`) VALUES ('$name', '$login', '$password')";
+			$result = mysqli_query($connect, $sql);
+			//Иначе это:
+			echo '<pre>';
+			echo 'Поздравляем с успешной регистрацией, ' . '<b>' . $name . '</b>' . '!:)';
+			echo '<br>';
+			echo 'Теперь Ваш логин зарезервирован в Базе Данных.';	
+			echo '<br>';
+			echo '<a href="/">Вернуться обратно</a>';
+			echo '</pre>';
+			exit();
+		}
+	}
+}
+
+/*
+function authorization_user($connect){
+	session_start();
+	$login = $_POST['login'];
+	if(isset($_POST['submit'])){
+		$sql = mysqli_query($connect, "SELECT * FROM users WHERE login ='".mysqli_real_escape_string($connect, $login)."'");
+		echo $sql;
+		exit();
+		if(mysqli_num_rows($sql) > 0){
+			$_SESSION['user'] = $user;
+			header("Location: pages/post.php");
+		} else {
+			exit('Fuck You!');
+		}
 	}
 }
 */

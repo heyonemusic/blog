@@ -5,6 +5,8 @@ require_once __DIR__ . '/../function/function.php';
 //Подключение сессии админа
 require_once __DIR__ . '/../ads/ads_session_admin.php';
 
+registration_new_user($connect);
+
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +46,7 @@ require_once __DIR__ . '/../ads/ads_session_admin.php';
 	</div>
 
 	<!-- Форма регистрации на сайте -->
-	<!--
+
 	<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -57,9 +59,8 @@ require_once __DIR__ . '/../ads/ads_session_admin.php';
 				<div class="modal-body">
 					<form method="post">
 						<div class="form-group" style="margin-bottom:5px;">
-							<input type="email" onkeyup="var yratext=/[^a-z,@,.0-9]/; if(yratext.test(this.value)) this.value=''" class="form-control" placeholder="E-mail: (максимум 16 символов)" name="email" maxlength=16 required><br>
 							<input type="text"  onkeyup="var yratext=/[^a-z,A-Z,а-я,А-Я]/; if(yratext.test(this.value)) this.value=''" class="form-control" placeholder="Ваше имя: (максимум 10 символов)" name="name" maxlength=10 required><br>
-							<input type="text" onkeyup="var yratext=/[^a-z,A-Z,0-9]/; if(yratext.test(this.value)) this.value=''" class="form-control" placeholder="Логин: (максимум 8 символов)" name="login" maxlength=8 required><br>
+							<input type="login" onkeyup="var yratext=/[^a-z,A-Z,0-9]/; if(yratext.test(this.value)) this.value=''" class="form-control" placeholder="Логин: (максимум 8 символов)" name="login" maxlength=8 required><br>
 							<input type="password" class="form-control" placeholder="Пароль: (максимум 8 символов)" name="password" maxlength=8 required><br>
 							<button type="submit" name="registration" class="btn btn-primary" style="float:right;">Зарегистрироваться</button>
 						</div>
@@ -70,21 +71,23 @@ require_once __DIR__ . '/../ads/ads_session_admin.php';
 			</div>
 		</div>
 	</div>
--->
 
-<!-- Навигация -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-	<div class="container">
-		<a class="navbar-brand" href="/">Тестовый блог</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarResponsive">
-			<ul class="navbar-nav ml-auto">
+	<!-- Навигация -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Тестовый блог</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
 				<!-- Если сессия не админ, то отображай ссылку
 					   на форму с авторизацией. Иначе, отображай ссылку 
 					   на административную панель сайта -->
 					   <?php if(!$_SESSION['admin']){ ?>
+					   	<li class="nav-item">
+					   		<a class="nav-link" href="/" data-toggle="modal" data-target="#exampleModal1">Регистрация</a>
+					   	</li>
 					   	<li class="nav-item">
 					   		<a class="nav-link" href="/" data-toggle="modal" data-target="#exampleModal">Вход</a>
 					   	</li>
@@ -92,6 +95,12 @@ require_once __DIR__ . '/../ads/ads_session_admin.php';
 					   else { ?>
 					   	<li class="nav-item">
 					   		<a class="nav-link" href="../app/admin/admin.php">Административная панель</a>
+					   	</li>
+					   <?php } ?>
+
+					   <?php if($_SESSION['user']){ ?>
+					   	<li class="nav-item">
+					   		<a class="nav-link" href="admin.php?do=logout">Выход</a>
 					   	</li>
 					   <?php } ?>
 					 </ul>

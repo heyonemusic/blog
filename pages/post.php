@@ -26,7 +26,6 @@ require_once '../ads/ads_post.php';
 <!-- Форма с добавлением комментария к статье, а также условие для админа. 
      Если сессия админ, то предоставь для него возможность
      удалять комментарии, которые оставили гости -->
-     <?php if(!$_SESSION['admin']){ ?>
       <div class="card my-4">
         <h5 class="card-header">Оставить комментарий:</h5>
         <div class="card-body">
@@ -39,16 +38,13 @@ require_once '../ads/ads_post.php';
           </form>
         </div>
       </div>
-    <?php } else { ?>
-
-    <?php } ?>
     <!-- Комментарии, которые оставили гости -->
     <h5 class="comment">Комментарии:</h5>
     <?php foreach($result as $res) { ?>
       <div class="media mb-4">
         <img class="d-flex mr-3 rounded-circle" src="https://img.icons8.com/nolan/48/000000/user.png" alt="">
         <div class="media-body">
-          <h5 class="mt-0"><?php echo $res['name'];?> 
+          <h5 class="mt-0"><?php echo $res['name'];?> <span style="font-size:12px;color: red;">(Гость)</span>
           <?php if($_SESSION['admin']){ ?>
             <a href="post.php?post_id=<?=$separate_post['id']?>&del_comment=<?=$res['id']?>" class="guest" style="color: gray;font-weight:100;font-size:14px;float: right;">Удалить</a>
           <?php } ?>
