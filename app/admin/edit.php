@@ -59,6 +59,11 @@ require_once '../../ads/admin/ads_edit.php';
 										<option><?=$category["id"]?></option>
 									<?php } ?>
 								</select><br>
+								<div class="description-categories">
+									1 - IT <br>
+									2 - Кулинария <br>
+									8 - Саморазвитие <br>
+								</div>
 								<label for="formGroupExampleInput">Текст записи:</label>
 								<textarea class="form-control" rows="10" name="text" placeholder="Текст..."><?php echo $separate_post['text']; ?></textarea>
 							</div>

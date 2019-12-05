@@ -159,7 +159,7 @@ function admin($connect){
 function registration_new_user($connect){
 	$name = trim($_POST['name']);
 	$login = trim($_POST['login']);
-	$password = trim(htmlspecialchars($_POST['password']));
+	$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 	if(isset($_POST['registration'])){
 		$query = mysqli_query($connect, "SELECT * FROM users WHERE login ='".mysqli_real_escape_string($connect, $login)."'");
 		if(mysqli_num_rows($query) > 0){
@@ -176,6 +176,7 @@ function registration_new_user($connect){
 		} else {
 			$sql = "INSERT INTO users (`name`, `login`, `password`) VALUES ('$name', '$login', '$password')";
 			$result = mysqli_query($connect, $sql);
+			var_dump($sql);
 			//Иначе это:
 			echo '<pre>';
 			echo 'Поздравляем с успешной регистрацией, ' . '<b>' . $name . '</b>' . '!:)';

@@ -10,3 +10,10 @@
 .comment {
 	padding: 20px 10px 20px 10px;
 }
+
+.description-categories {
+	margin-top: -10px;
+	padding-bottom: 10px;
+	color: #6c757d;
+	font-size: 14.3px;
+}
