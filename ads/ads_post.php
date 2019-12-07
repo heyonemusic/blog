@@ -7,7 +7,7 @@ if(isset($_GET['del_comment'])){
 	mysqli_query($connect, $query);
 }
 //Добавление комментария к статье
-add_comment($connect, $post_id);
+add_comment($connect);
 //Получение ID поста и присвоение в переменную
 $post_id = (int)$_GET['post_id'];
 //Вывод конкретного поста по ID

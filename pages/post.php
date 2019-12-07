@@ -22,10 +22,16 @@ require_once '../ads/ads_post.php';
     <hr>
     <p><?php echo nl2br($separate_post['text']); ?></p>
     <a href="/" class="btn btn-primary">&larr; На главную</a>
+    <?php if(isset($_SESSION['admin'])){ ?>
+      <a href="../app/admin/edit.php?post_id=<?=$separate_post['id']?>" class="btn btn-primary" style="float:right;background-color:#5fb053">Редактировать</a>
+    <?php } ?>
     <hr>
-<!-- Форма с добавлением комментария к статье, а также условие для админа. 
-     Если сессия админ, то предоставь для него возможность
-     удалять комментарии, которые оставили гости -->
+    <!-- Форма с добавлением комментария к статье, а также условие для админа. 
+    Если сессия админ, то предоставь для него возможность
+    удалять комментарии, которые оставили гости -->
+    <?php if(isset($_SESSION['admin'])){ ?>
+
+    <?php } else { ?>
       <div class="card my-4">
         <h5 class="card-header">Оставить комментарий:</h5>
         <div class="card-body">
@@ -38,14 +44,15 @@ require_once '../ads/ads_post.php';
           </form>
         </div>
       </div>
+    <?php } ?>
     <!-- Комментарии, которые оставили гости -->
     <h5 class="comment">Комментарии:</h5>
     <?php foreach($result as $res) { ?>
       <div class="media mb-4">
         <img class="d-flex mr-3 rounded-circle" src="https://img.icons8.com/nolan/48/000000/user.png" alt="">
         <div class="media-body">
-          <h5 class="mt-0"><?php echo $res['name'];?> <span style="font-size:12px;color: red;">(Гость)</span>
-          <?php if($_SESSION['admin']){ ?>
+          <h5 class="mt-0"><?php echo $res['name'];?>
+          <?php if(isset($_SESSION['admin'])){ ?>
             <a href="post.php?post_id=<?=$separate_post['id']?>&del_comment=<?=$res['id']?>" class="guest" style="color: gray;font-weight:100;font-size:14px;float: right;">Удалить</a>
           <?php } ?>
         </h5>

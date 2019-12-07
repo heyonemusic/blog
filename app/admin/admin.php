@@ -2,8 +2,10 @@
 
 //Подключение к БД
 require_once __DIR__ . '/../../database/connect.php';
-//Файл авторизации админа
-require_once __DIR__ . '/../../database/authorization.php';
+//Ограничение доступа к странице
+require_once __DIR__ . '/../../database/limitation.php';
+//Выход из сессии админа
+require_once __DIR__ . '/../../database/logout.php';
 //Функции
 require_once __DIR__ . '/../../function/function.php';
 //Объявленные переменные, функции
@@ -27,12 +29,15 @@ require_once __DIR__ . '/../../ads/admin/ads_admin.php';
 	<!-- Меню -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/">Административная панель</a>
+			<a class="navbar-brand" href="#">Административная панель</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="/">На главную</a>
+					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="admin.php?do=logout">Выход</a>
 					</li>
@@ -133,6 +138,11 @@ require_once __DIR__ . '/../../ads/admin/ads_admin.php';
 										<option><?=$category["id"]?></option>
 									<?php } ?>
 								</select><br>
+								<div class="description-categories">
+									1 - IT <br>
+									2 - Кулинария <br>
+									8 - Саморазвитие <br>
+								</div>
 								<textarea class="form-control" rows="12" name="text" placeholder="Вставка изображений осуществляется так: img class=card-img-top src=ссылка на изображение"></textarea>
 							</div>
 							<button type="submit" name="submit" class="btn btn-primary" style="float:right;">Добавить</button>

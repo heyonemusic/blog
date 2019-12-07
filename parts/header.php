@@ -4,8 +4,10 @@
 require_once __DIR__ . '/../function/function.php';
 //Подключение сессии админа
 require_once __DIR__ . '/../ads/ads_session_admin.php';
-
-registration_new_user($connect);
+//Выход из сессии админа
+require_once __DIR__ . '/../database/logout.php';
+//Регистрация пользователей
+require_once __DIR__ . '/../ads/ads_registration_user.php';
 
 ?>
 
@@ -44,9 +46,7 @@ registration_new_user($connect);
 			</div>
 		</div>
 	</div>
-
 	<!-- Форма регистрации на сайте -->
-
 	<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -71,7 +71,6 @@ registration_new_user($connect);
 			</div>
 		</div>
 	</div>
-
 	<!-- Навигация -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
@@ -84,7 +83,7 @@ registration_new_user($connect);
 				<!-- Если сессия не админ, то отображай ссылку
 					   на форму с авторизацией. Иначе, отображай ссылку 
 					   на административную панель сайта -->
-					   <?php if(!$_SESSION['admin']){ ?>
+					   <?php if(empty($_SESSION['admin'])){ ?>
 					   	<li class="nav-item">
 					   		<a class="nav-link" href="/" data-toggle="modal" data-target="#exampleModal1">Регистрация</a>
 					   	</li>
@@ -96,11 +95,8 @@ registration_new_user($connect);
 					   	<li class="nav-item">
 					   		<a class="nav-link" href="../app/admin/admin.php">Административная панель</a>
 					   	</li>
-					   <?php } ?>
-
-					   <?php if($_SESSION['user']){ ?>
 					   	<li class="nav-item">
-					   		<a class="nav-link" href="admin.php?do=logout">Выход</a>
+					   		<a class="nav-link" href="?do=logout">Выход</a>
 					   	</li>
 					   <?php } ?>
 					 </ul>

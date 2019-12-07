@@ -2,8 +2,10 @@
 
 //Подключение к БД
 require_once '../../database/connect.php';
-//Файл авторизации админа
-require_once '../../database/authorization.php';
+//Ограничение доступа к странице
+require_once '../../database/limitation.php';
+//Выход из сессии админа
+require_once '../../database/logout.php';
 //Функции
 require_once '../../function/function.php';
 //Объявленные переменные, функции
@@ -27,14 +29,20 @@ require_once '../../ads/admin/ads_category.php';
 	<!-- Меню -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/">Административная панель</a>
+			<a class="navbar-brand" href="#">Административная панель</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<a class="nav-link" href="#">Выход</a>
+						<a class="nav-link" href="/">На главную</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="admin.php">Назад</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="?do=logout">Выход</a>
 					</li>
 				</ul>
 			</div>

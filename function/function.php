@@ -48,11 +48,11 @@ function get_category_title($category_id){
 }
 
 //Добавление комментария к статье
-function add_comment($connect, $post_id){
-	$name = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['name'])));
-	$text = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['text'])));
+function add_comment($connect){
 	$post_id = (int)$_GET['post_id'];
 	if(!empty($_POST)){
+		$name = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['name'])));
+		$text = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['text'])));
 		$sql = "INSERT INTO comments (`name`, `text`, `post_id`) VALUES ('$name', '$text', '$post_id')";
 		$result = mysqli_query($connect, $sql);
 		return $result;
@@ -132,20 +132,19 @@ function edit_post($connect, $post_id){
 //Сессия для работы в административной панели
 function admin($connect){
 	session_start();
-	//Получаем админа
-	$sql_login = "SELECT * FROM users";
-	$query_login = mysqli_query($connect, $sql_login);
-	$result_login = mysqli_fetch_all($query_login, MYSQLI_ASSOC);
-	$admin = $result_login['0']['login'];
-	//Получаем пароль админа
-	$sql_password = "SELECT * FROM users";
-	$query_password = mysqli_query($connect, $sql_password);
-	$result_password = mysqli_fetch_all($query_password, MYSQLI_ASSOC);
-	$password = $result_password['0']['password'];
 	//Проверка введённых данных в форме с БД
 	if(isset($_POST['submit'])){
-		if($admin === $_POST['login'] && $password === $_POST['password']){
-			$_SESSION['admin'] = $admin;
+		//Получаем админа
+		$query = mysqli_query($connect, "SELECT * FROM users");
+		$result = mysqli_fetch_all($query, MYSQLI_ASSOC);
+		$login = $result['0']['login'];
+	  //Получаем пароль админа
+		$query = mysqli_query($connect, "SELECT * FROM users");
+		$result = mysqli_fetch_all($query, MYSQLI_ASSOC);
+		$password = $result['0']['password'];
+		//Проверяем введённые данные в форме на соответствие с данными в БД
+		if($login === $_POST['login'] && $password === $_POST['password']){
+			$_SESSION['admin'] = $login;
 			header("Location: app/admin/admin.php");
 			exit;
 		}
@@ -155,12 +154,11 @@ function admin($connect){
 	}
 }
 
-
 function registration_new_user($connect){
-	$name = trim($_POST['name']);
-	$login = trim($_POST['login']);
-	$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 	if(isset($_POST['registration'])){
+		$name = trim($_POST['name']);
+		$login = trim($_POST['login']);
+		$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 		$query = mysqli_query($connect, "SELECT * FROM users WHERE login ='".mysqli_real_escape_string($connect, $login)."'");
 		if(mysqli_num_rows($query) > 0){
 		//Если пользователь с таким логином уже существует, то
@@ -176,7 +174,6 @@ function registration_new_user($connect){
 		} else {
 			$sql = "INSERT INTO users (`name`, `login`, `password`) VALUES ('$name', '$login', '$password')";
 			$result = mysqli_query($connect, $sql);
-			var_dump($sql);
 			//Иначе это:
 			echo '<pre>';
 			echo 'Поздравляем с успешной регистрацией, ' . '<b>' . $name . '</b>' . '!:)';
@@ -189,23 +186,5 @@ function registration_new_user($connect){
 		}
 	}
 }
-
-/*
-function authorization_user($connect){
-	session_start();
-	$login = $_POST['login'];
-	if(isset($_POST['submit'])){
-		$sql = mysqli_query($connect, "SELECT * FROM users WHERE login ='".mysqli_real_escape_string($connect, $login)."'");
-		echo $sql;
-		exit();
-		if(mysqli_num_rows($sql) > 0){
-			$_SESSION['user'] = $user;
-			header("Location: pages/post.php");
-		} else {
-			exit('Fuck You!');
-		}
-	}
-}
-*/
 
 ?>
