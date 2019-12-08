@@ -1,10 +1,10 @@
 <?php
 
 //Возможность удаления комментария для админа
-if(isset($_GET['del_comment'])){
-	$id = (int)($_GET['del_comment']);
-	$query = "DELETE FROM comments WHERE id = $id";
-	mysqli_query($connect, $query);
+if (isset($_GET['del_comment'])) {
+    $id = (int)($_GET['del_comment']);
+    $query = "DELETE FROM comments WHERE id = $id";
+    mysqli_query($connect, $query);
 }
 //Добавление комментария к статье
 add_comment($connect);
