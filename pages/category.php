@@ -24,9 +24,12 @@ require_once '../ads/ads_category.php';
             <p class="card-text"><?php echo mb_substr(strip_tags($post['text']), 0, 200) . '...'; ?></p>
             <a href="post.php?post_id=<?=$post['id']?>" class="btn btn-primary">Читать полностью &rarr;</a>
           </div>
-          <div class="card-footer text-muted">
-            Опубликовано: <?php echo $post['datetime']; ?>
-          </div>
+            <!-- Дата и время публикации поста -->
+      <p>Опубликовано: 
+        <?php echo date('j', strtotime($post['datetime']));?> 
+        <?php date_rus(9) ?> 
+        <?php echo date('G:i | Y', strtotime($post['datetime']));?>
+      </p>
         </div>
       <?php } ?>
       <nav aria-label="Page navigation example">

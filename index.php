@@ -23,7 +23,10 @@ require_once 'ads/ads_index.php';
             <a href="pages/post.php?post_id=<?=$post['id']?>" class="btn btn-primary">Читать полностью &rarr;</a>
           </div>
           <div class="card-footer text-muted">
-            Опубликовано: <?php echo $post['datetime']; ?>
+            Опубликовано:
+            <?php echo date('j', strtotime($post['datetime']));?> 
+            <?php date_rus(9) ?> 
+            <?php echo date('G:i | Y', strtotime($post['datetime']));?>
           </div>
         </div>
       <?php } ?>

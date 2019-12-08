@@ -15,17 +15,21 @@ require_once '../ads/ads_post.php';
       <!-- Заголовок, дата публикации, текст статьи -->
       <h1 class="mt-4"><?php echo $separate_post['title']; ?></h1>
       <hr>
-      <p>Опубликовано: <?php echo $separate_post['datetime']; ?>
-    </p>
-    <hr>
-    <img class="img-fluid rounded" src="../<?php echo $separate_post['image']; ?>" alt="">
-    <hr>
-    <p><?php echo nl2br($separate_post['text']); ?></p>
-    <a href="/" class="btn btn-primary">&larr; На главную</a>
-    <?php if(isset($_SESSION['admin'])){ ?>
-      <a href="../app/admin/edit.php?post_id=<?=$separate_post['id']?>" class="btn btn-primary" style="float:right;background-color:#5fb053">Редактировать</a>
-    <?php } ?>
-    <hr>
+      <!-- Дата и время публикации поста -->
+      <p>Опубликовано: 
+        <?php echo date('j', strtotime($separate_post['datetime']));?> 
+        <?php date_rus(9) ?> 
+        <?php echo date('G:i | Y', strtotime($separate_post['datetime']));?>
+      </p>
+      <hr>
+      <img class="img-fluid rounded" src="../<?php echo $separate_post['image']; ?>" alt="">
+      <hr>
+      <p><?php echo nl2br($separate_post['text']); ?></p>
+      <a href="/" class="btn btn-primary">&larr; На главную</a>
+      <?php if(isset($_SESSION['admin'])){ ?>
+        <a href="../app/admin/edit.php?post_id=<?=$separate_post['id']?>" class="btn btn-primary" style="float:right;background-color:#5fb053">Редактировать</a>
+      <?php } ?>
+      <hr>
     <!-- Форма с добавлением комментария к статье, а также условие для админа. 
     Если сессия админ, то предоставь для него возможность
     удалять комментарии, которые оставили гости -->
@@ -40,7 +44,7 @@ require_once '../ads/ads_post.php';
               <input type="text" class="form-control" placeholder="Ваше Имя:" name="name" required><br>
               <textarea class="form-control" rows="3" name="text" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Отправить</button>
+            <button type="submit" class="btn btn-primary" name="submit">Отправить</button>
           </form>
         </div>
       </div>
@@ -52,6 +56,12 @@ require_once '../ads/ads_post.php';
         <img class="d-flex mr-3 rounded-circle" src="https://img.icons8.com/nolan/48/000000/user.png" alt="">
         <div class="media-body">
           <h5 class="mt-0"><?php echo $res['name'];?>
+          <!-- Вывод даты и времени, в которое был оставлен комментарий -->
+          <span class="datetime">
+            <?php echo date('j', strtotime($res['datetime']));?> 
+            <?php date_rus(12) ?> 
+            <?php echo date('G:i | Y', strtotime($res['datetime']));?>
+          </span>
           <?php if(isset($_SESSION['admin'])){ ?>
             <a href="post.php?post_id=<?=$separate_post['id']?>&del_comment=<?=$res['id']?>" class="guest" style="color: gray;font-weight:100;font-size:14px;float: right;">Удалить</a>
           <?php } ?>

@@ -131,8 +131,11 @@ require_once __DIR__ . '/../../ads/admin/ads_admin.php';
 					<div class="card-body">
 						<form method="post" enctype="multipart/form-data">
 							<div class="form-group">
+								<label for="formGroupExampleInput">Заголовок записи:</label>
 								<input type="text" class="form-control" placeholder="Заголовок статьи:" name="title" required><br>
+								<label for="formGroupExampleInput">Изображение:</label>
 								<input type="file" name="image" class="form-control-file" required><br>
+								<label for="formGroupExampleInput">Категория:</label>
 								<select class="form-control" name="categories">
 									<?php foreach($categories as $category) { ?>
 										<option><?=$category["id"]?></option>
@@ -143,6 +146,7 @@ require_once __DIR__ . '/../../ads/admin/ads_admin.php';
 									2 - Кулинария <br>
 									8 - Саморазвитие <br>
 								</div>
+								<label for="formGroupExampleInput">Текст записи:</label>
 								<textarea class="form-control" rows="12" name="text" placeholder="Вставка изображений осуществляется так: img class=card-img-top src=ссылка на изображение"></textarea>
 							</div>
 							<button type="submit" name="submit" class="btn btn-primary" style="float:right;">Добавить</button>

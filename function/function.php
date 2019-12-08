@@ -50,12 +50,12 @@ function get_category_title($category_id){
 //Добавление комментария к статье
 function add_comment($connect){
 	$post_id = (int)$_GET['post_id'];
-	if(!empty($_POST)){
+	if(isset($_POST['submit'])){
 		$name = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['name'])));
 		$text = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['text'])));
 		$sql = "INSERT INTO comments (`name`, `text`, `post_id`) VALUES ('$name', '$text', '$post_id')";
 		$result = mysqli_query($connect, $sql);
-		return $result;
+		header("Location: ". $_SERVER["REQUEST_URI"]);
 	}
 }
 
@@ -145,7 +145,7 @@ function admin($connect){
 		//Проверяем введённые данные в форме на соответствие с данными в БД
 		if($login === $_POST['login'] && $password === $_POST['password']){
 			$_SESSION['admin'] = $login;
-			header("Location: app/admin/admin.php");
+			header("Location: /app/admin/admin.php");
 			exit;
 		}
 		else {
@@ -185,6 +185,29 @@ function registration_new_user($connect){
 			exit();
 		}
 	}
+}
+
+//Вывод месяца на русском языке
+function date_rus($month)
+{
+	$arr = [
+		'Января',
+		'Февраля',
+		'Марта',
+		'Апреля',
+		'Мая',
+		'Июня',
+		'Июля',
+		'Августа',
+		'Сентября',
+		'Октября',
+		'Ноября',
+		'Декабря'
+	];
+// Поскольку от 1 до 12, а в массиве, как мы знаем, отсчет идет от нуля (0 до 11),
+// то вычитаем 1 чтоб правильно выбрать уже из нашего массива.
+	$month = date($month) - 1;
+	echo $arr[$month];
 }
 
 ?>

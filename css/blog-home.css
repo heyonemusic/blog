@@ -17,3 +17,10 @@
 	color: #6c757d;
 	font-size: 14.3px;
 }
+
+.datetime {
+	color: #828282;
+	font-size: 14px;
+	font-weight: normal;
+	margin-left: 10px;
+}
