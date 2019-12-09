@@ -23,3 +23,6 @@
 - **vendor** - файлы *Bootstrap*
 
 А также файл с главной страницей **index.php**.
+
+Посмотреть проект можно здесь:<br>
+https://testblogweb.000webhostapp.com/
