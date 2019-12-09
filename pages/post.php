@@ -45,7 +45,7 @@ require_once '../ads/ads_post.php';
                                        required><br>
                                 <textarea class="form-control" rows="3" name="text" required></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary" name="submit">Отправить</button>
+                            <button type="submit" class="btn btn-primary" name="submit_com">Отправить</button>
                         </form>
                     </div>
                 </div>

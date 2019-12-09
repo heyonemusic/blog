@@ -56,7 +56,7 @@ function get_category_title($category_id)
 function add_comment($connect)
 {
     $post_id = (int)$_GET['post_id'];
-    if (isset($_POST['submit'])) {
+    if (isset($_POST['submit_com'])) {
         $name = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['name'])));
         $text = trim(htmlspecialchars(mysqli_real_escape_string($connect, $_POST['text'])));
         $sql = "INSERT INTO comments (`name`, `text`, `post_id`) VALUES ('$name', '$text', '$post_id')";
@@ -155,11 +155,18 @@ function admin($connect)
         if ($login === $_POST['login'] && $password === $_POST['password']) {
             $_SESSION['admin'] = $login;
             header("Location: /app/admin/admin.php");
-            exit;
+            exit();
         } else {
-            header("Location: " . $_SERVER["REQUEST_URI"]);
-        }
-    }
+           echo '<pre>';
+           echo 'Введённые данные неверны.';
+           echo '<br>';
+           echo 'Пожалуйста, вернитесь обратно и попробуйте заново.';
+           echo '<br>';
+           echo '<a href="/">Вернуться обратно</a>';
+           echo '</pre>';
+           exit();
+       }
+   }
 }
 
 function registration_new_user($connect)
